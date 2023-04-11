@@ -1,5 +1,6 @@
 #include "TestScene.h"
 #include "Player.h"
+#include "Coin.h"
 
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
@@ -10,7 +11,9 @@ TestScene::TestScene(GameObject * parent)
 //初期化
 void TestScene::Initialize()
 {
+	Instantiate<Coin>(this);
 	Instantiate<Player>(this);
+
 }
 
 //更新

@@ -2,15 +2,14 @@
 #include "Engine/GameObject.h"
 
 //テストシーンを管理するクラス
-class Player : public GameObject
+class Coin : public GameObject
 {
 private:
 	int hModel_;
-	int hSound_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
-	Player(GameObject* parent);
+	Coin(GameObject* parent);
 
 	//初期化
 	void Initialize() override;
@@ -23,7 +22,4 @@ public:
 
 	//開放
 	void Release() override;
-
-	//接触判定
-	void OnCollision(GameObject* pTarget) override;
 };

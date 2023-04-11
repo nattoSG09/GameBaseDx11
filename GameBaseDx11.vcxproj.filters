@@ -97,6 +97,8 @@
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Coin.cpp" />
+    <ClCompile Include="Enemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -170,6 +172,8 @@
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Coin.h" />
+    <ClInclude Include="Enemy.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
