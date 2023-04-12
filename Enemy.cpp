@@ -11,6 +11,7 @@ Enemy::Enemy(GameObject* parent)
 //初期化
 void Enemy::Initialize()
 {
+	WayPoint = transform_.position_;
 }
 
 //更新
@@ -122,17 +123,20 @@ bool Enemy::isArrival(XMFLOAT3 NowPos_, XMFLOAT3 TargetPos_)
 //Enemyの追従処理を行う関数
 void Enemy::FollowingMove()
 {
+	//メモ
+	{
+		//TargetPosはヘッダーで宣言する
+		//WayPointはヘッダーを宣言する
+	}
+
 	//目的地を取得(playerの位置)
 	Player* p = (Player*)FindObject("Player");
 	XMFLOAT3 TargetPos = p->GetPosition();
 
-	//目的地までの経由地を取得
-	XMFLOAT3 WayPoint = DIJKSTRA(transform_.position_,TargetPos);
-
 	//経由地にたどりつくまで
 	if (!isArrival) {
 
-		//現在地と経由地の差を計算する
+		//EnemyとWayPointの差を計算する
 		XMFLOAT3 deltaPosition = XMFLOAT3(
 			WayPoint.x - transform_.position_.x,
 			0,
@@ -142,11 +146,43 @@ void Enemy::FollowingMove()
 		//Enemyの進行方向を計算する
 		XMVECTOR EnemyDir = XMVector3Normalize(XMLoadFloat3(&deltaPosition));
 
+		//Enemyの移動速度
+		float Speed = 0.05f;
 
+		//EnemyをWayPointに向かって移動させる
+		transform_.position_.x += (XMVectorGetX(EnemyDir) * Speed);
+		transform_.position_.y += (XMVectorGetY(EnemyDir) * Speed);
+		transform_.position_.z += (XMVectorGetZ(EnemyDir) * Speed);
+
+		//ベクトルの長さを求める
+		XMVECTOR vLength = XMVector3Length(EnemyDir);
+		float length = XMVectorGetX(vLength);
+
+		if (length != 0)
+		{
+			XMVECTOR vFront = { 0,0,1,0 };//奥向きのベクトル
+
+			XMVECTOR vDot = XMVector3Dot(vFront, EnemyDir);
+			//↑の二つのベクトルの内積を求める
+			float dot = XMVectorGetX(vDot);
+			float angle = acos(dot);//アークコサインで計算すると"狭い角度"のほうの角度を求める
+
+			XMVECTOR vCross = XMVector3Cross(vFront, EnemyDir);
+			//↑二つのベクトルの外積を求める
+			//外積のYが０より小さかったら
+			if (XMVectorGetY(vCross) < 0) {
+				//angleに -1 をかける
+				angle *= -1;
+			}
+
+			transform_.rotate_.y = XMConvertToDegrees(angle);
+		}
 	}
-	
-
-
+	//たどり着いたら
+	else {
+		//TargetPosまでのWayPointを取得
+		XMFLOAT3 WayPoint = DIJKSTRA(transform_.position_, TargetPos);
+	}
 }
 
 //Enemyの徘徊処理を行う関数

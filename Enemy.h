@@ -5,6 +5,7 @@ using std::abs;
 
 class Enemy : public GameObject
 {
+	XMFLOAT3 WayPoint;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
